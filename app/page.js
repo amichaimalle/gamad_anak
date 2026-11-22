@@ -15,8 +15,8 @@ function writeSaved(code) {
 
 async function login(code) {
   const res = await fetch('/api/login', { method: 'POST', body: JSON.stringify({ code }) });
-  if (!res.ok) return null;
-  return (await res.json()).role;
+  const json = await res.json().catch(() => ({}));
+  return res.ok ? { role: json.role } : { error: json.error || 'אופס! הקוד לא מוכר. בדקו שוב את ההודעה.' };
 }
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
   useEffect(() => {
     const saved = readSaved();
     if (!saved) { setBooting(false); return; }
-    login(saved).then((role) => {
+    login(saved).then(({ role }) => {
       if (role) setSession({ role, code: saved });
       else writeSaved('');
       setBooting(false);
@@ -44,20 +44,21 @@ export default function Home() {
 
 function LoginScreen({ onLogin }) {
   const [code, setCode] = useState('');
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const UNKNOWN = 'אופס! הקוד לא מוכר. בדקו שוב את ההודעה.';
 
   const submit = async (e) => {
     e.preventDefault();
     const clean = code.replace(/\D/g, '');
-    if (!clean) { setError(true); return; }
+    if (!clean) { setError(UNKNOWN); return; }
     setBusy(true);
     try {
-      const role = await login(clean);
-      if (role) onLogin(role, clean);
-      else setError(true);
+      const r = await login(clean);
+      if (r.role) onLogin(r.role, clean);
+      else setError(r.error);
     } catch {
-      setError(true);
+      setError('אין חיבור לשרת. נסו שוב.');
     } finally {
       setBusy(false);
     }
@@ -70,7 +71,7 @@ function LoginScreen({ onLogin }) {
       <Hero />
       <div className="login-title">
         <h1>משחק הגמד ענק</h1>
-        <p>של משפחת מלא-מלמד</p>
+        <p>של משפחת מלא-מלאך-מלמד</p>
       </div>
       <form className="col card login-card" onSubmit={submit}>
         <label htmlFor="code">הקוד האישי שלך</label>
@@ -82,10 +83,10 @@ function LoginScreen({ onLogin }) {
           autoComplete="one-time-code"
           placeholder="• • • • •"
           value={code}
-          onChange={(e) => { setCode(e.target.value); setError(false); }}
+          onChange={(e) => { setCode(e.target.value); setError(''); }}
         />
         {error && (
-          <p role="alert" className="alert-err">{Icons.alert()}אופס! הקוד לא מוכר. בדקו שוב את ההודעה.</p>
+          <p role="alert" className="alert-err">{Icons.alert()}{error}</p>
         )}
         <button className="btn" type="submit" disabled={busy} style={{ height: 58, fontSize: 21 }}>
           יאללה, נכנסים{Icons.enter()}
@@ -142,7 +143,7 @@ function PlayerScreen({ code, onExit }) {
       <Sparkles items={[[8, 140], [92, 420, 1, 1], [5, 760, 1, 0.5], [90, 1040, 1.2, 1.5]]} />
       <header className="col top-bar">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
-          <span className="sub">גמד ענק · מלא-מלמד</span>
+          <span className="sub">גמד ענק · מלא-מלאך-מלמד</span>
           <span className="hello">שלום, {data.name}!</span>
         </div>
         <button type="button" className="exit" onClick={onExit}>יציאה{Icons.exit()}</button>

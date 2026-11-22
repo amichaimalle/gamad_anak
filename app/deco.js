@@ -76,6 +76,8 @@ export const Icons = {
   copy: () => icon('M11 9h7a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zM5 15V5a1 1 0 0 1 1-1h9', { color: '#FFFFFF' }),
   reset: () => icon('M4 4v6h6M20 20v-6h-6M5.5 15a7 7 0 0 0 12.2 2.5M18.5 9A7 7 0 0 0 6.3 6.5', { size: 20, color: '#FFC2CB', w: 2.4 }),
   warn: () => icon('M12 3l10 18H2zM12 10v5M12 18h.01', { size: 30, color: '#C21F3A', w: 2.4 }),
+  redraw: () => icon('M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.5 6.2L3 16M3 21v-5h5', { size: 20, color: '#BFE0FF', w: 2.4 }),
+  redrawBig: () => icon('M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.5 6.2L3 16M3 21v-5h5', { size: 30, color: '#1B2A78', w: 2.4 }),
   refresh: () => icon('M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7', { size: 18, color: '#1B2A78' }),
 };
 

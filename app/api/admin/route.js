@@ -1,4 +1,4 @@
-import { ADMIN_CODE, GameError, adminView, getGame, savePeople, runDraw, resetGame } from '../../../lib/game.js';
+import { ADMIN_CODE, GameError, adminView, getGame, saveSetup, runDraw, resetGame, backToSetup } from '../../../lib/game.js';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,17 +21,18 @@ export async function GET(req) {
   return handle(req, getGame);
 }
 
-// שמירת רשימת המשתתפים (לפני ההגרלה)
+// שמירת המשתתפים והאילוצים (לפני ההגרלה)
 export async function PUT(req) {
-  const { people } = await req.json().catch(() => ({}));
-  return handle(req, () => savePeople(people));
+  const { people, constraints } = await req.json().catch(() => ({}));
+  return handle(req, () => saveSetup(people, constraints));
 }
 
-// action: 'draw' | 'reset'
+// action: 'draw' | 'redraw' | 'reset'
 export async function POST(req) {
   const { action } = await req.json().catch(() => ({}));
   return handle(req, () => {
     if (action === 'draw') return runDraw();
+    if (action === 'redraw') return backToSetup();
     if (action === 'reset') return resetGame();
     throw new GameError('פעולה לא מוכרת');
   });

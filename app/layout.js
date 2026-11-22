@@ -1,8 +1,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'גמד ענק – משפחת מלא-מלמד',
-  description: 'משחק הגמד ענק של משפחת מלא-מלמד',
+  title: 'גמד ענק – משפחת מלא-מלאך-מלמד',
+  description: 'משחק הגמד ענק של משפחת מלא-מלאך-מלמד',
 };
 
 export const viewport = {
